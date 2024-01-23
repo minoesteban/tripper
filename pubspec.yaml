@@ -1,5 +1,5 @@
 name: tripper
-description: "Your trip companion, whever you go."
+description: 'Your trip companion, whever you go.'
 publish_to: 'none'
 
 version: 1.0.0+1
@@ -16,6 +16,9 @@ dependencies:
   flutter_riverpod: ^2.4.9
   riverpod_annotation: ^2.3.3
   freezed_annotation: ^2.4.1
+  flutter_localizations:
+    sdk: flutter
+  intl: any
 
 dev_dependencies:
   flutter_test:
@@ -29,8 +32,16 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
+  generate: false
   uses-material-design: true
+
+flutter_intl:
+  enabled: true
+  class_name: L10n
+  main_locale: en
+  arb_dir: lib/l10n
+  output_dir: lib/l10n/generated
+  use_deferred_loading: false # Optional. Must be set to true to generate localization code that is loaded with deferred loading. Default: false
