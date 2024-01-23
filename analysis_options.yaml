@@ -19,6 +19,7 @@ analyzer:
     - 'ios/**'
     - 'android/**'
     - 'images/**'
+    - 'lib/l10n/generated/**'
     - 'lib/generated/**'
     - 'lib/res/**'
     - '**.g.dart'
