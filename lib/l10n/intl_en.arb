@@ -1,0 +1,30 @@
+{
+    "appName": "Tripper",
+    "@appName": {
+        "type" : "text"
+    },
+    "signIn_signedIn": "Signed In!",
+    "@signIn_signedIn": {
+        "type" : "text"
+    },
+    "signIn_signIn_action": "Sign In!",
+    "@signIn_signIn_action": {
+        "type" : "text"
+    },
+    "tabBar_home": "Home",
+    "@tabBar_home": {
+        "type" : "text"
+    },
+    "tabBar_profile": "Profile",
+    "@tabBar_profile": {
+        "type" : "text"
+    },
+    "tabBar_map": "Map",
+    "@tabBar_map": {
+        "type" : "text"
+    },
+    "tabBar_trips": "Trips",
+    "@tabBar_trips": {
+        "type" : "text"
+    }
+}

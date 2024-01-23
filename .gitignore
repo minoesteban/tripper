@@ -46,3 +46,4 @@ app.*.map.json
 # Generated files
 *.g.dart
 *.freezed.dart
+lib/l10n/generated
