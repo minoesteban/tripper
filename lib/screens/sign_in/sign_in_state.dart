@@ -6,7 +6,7 @@ part 'sign_in_state.freezed.dart';
 class SignInState with _$SignInState {
   const factory SignInState.init() = _SignInStateInit;
 
-  const factory SignInState.loading() = _SignInStateLoading;
+  const factory SignInState.signedIn() = _SignInStateSignedIn;
 
-  const factory SignInState.idle({required bool isSignedIn}) = _SignInStateIdle;
+  const factory SignInState.signedOut() = _SignInStateSignedOut;
 }

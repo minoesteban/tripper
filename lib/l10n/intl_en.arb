@@ -3,6 +3,10 @@
     "@appName": {
         "type" : "text"
     },
+    "signIn_title": "Sign In",
+    "@signIn_title": {
+        "type" : "text"
+    },
     "signIn_signedIn": "Signed In!",
     "@signIn_signedIn": {
         "type" : "text"
@@ -25,6 +29,26 @@
     },
     "tabBar_trips": "Trips",
     "@tabBar_trips": {
+        "type" : "text"
+    },
+    "map_title": "Map",
+    "@map_title": {
+        "type" : "text"
+    },
+    "home_title": "Home",
+    "@home_title": {
+        "type" : "text"
+    },
+    "trips_title": "Trips",
+    "@trips_title": {
+        "type" : "text"
+    },
+    "profile_title": "Profile",
+    "@profile_title": {
+        "type" : "text"
+    },
+    "profile_signOut_action": "Sign Out",
+    "@profile_signOut_action": {
         "type" : "text"
     }
 }
