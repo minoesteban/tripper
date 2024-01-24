@@ -6,6 +6,4 @@ abstract class AuthRepository {
   Future<void> deleteToken();
 
   Stream<bool> get isSignedInStream;
-
-  void dispose();
 }

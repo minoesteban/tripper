@@ -36,10 +36,4 @@ class AuthRepositoryImpl implements AuthRepository {
     await _authLocalDataSource.saveToken(token);
     _isSignedInStream.add(isSignedIn);
   }
-
-  @override
-  void dispose() {
-    log('AuthRepositoryImpl dispose');
-    // _isSignedInStream.close();
-  }
 }

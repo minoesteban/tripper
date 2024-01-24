@@ -13,13 +13,39 @@
             "name": "tripper (profile)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "profile",
         },
         {
             "name": "tripper (release)",
             "request": "launch",
             "type": "dart",
             "flutterMode": "release"
+        },
+        {
+            "name": "tripper web",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-renderer=html",
+            ]
+        },
+        {
+            "name": "tripper web (profile)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile",
+            "args": [
+                "--web-renderer=html",
+            ]
+        },
+        {
+            "name": "tripper web (release)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
+            "args": [
+                "--web-renderer=html",
+            ]
         }
     ]
 }

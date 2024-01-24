@@ -1,0 +1,1 @@
+class LocationNotAvailableException implements Exception {}

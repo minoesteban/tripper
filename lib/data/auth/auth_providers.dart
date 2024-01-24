@@ -9,16 +9,14 @@ part 'auth_providers.g.dart';
 
 @Riverpod(keepAlive: true)
 AuthRepository authRepository(AuthRepositoryRef ref) {
-  final dataSource = ref.read(authLocalDataSourceProvider);
+  final dataSource = ref.read(_authLocalDataSourceProvider);
   final repository = AuthRepositoryImpl(dataSource);
-
-  ref.onDispose(repository.dispose);
 
   return repository;
 }
 
 @riverpod
-AuthLocalDataSource authLocalDataSource(AuthLocalDataSourceRef ref) {
+AuthLocalDataSource _authLocalDataSource(_AuthLocalDataSourceRef ref) {
   final localStorage = ref.read(localStorageProvider);
   return AuthLocalDataSourceImpl(localStorage);
 }
