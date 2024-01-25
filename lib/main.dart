@@ -1,4 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_config/flutter_config.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,8 +11,14 @@ import 'package:tripper/router.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await FlutterConfig.loadEnvVariables();
 
-  await L10n.load(const Locale('en'));
+  await L10n.load(L10n.delegate.supportedLocales.first);
+
+  Gemini.init(
+    apiKey: _getGeminiAPIKey(),
+    enableDebugging: true,
+  );
 
   final sharedPreferences = await SharedPreferences.getInstance();
 
@@ -46,11 +55,23 @@ class TripperApp extends ConsumerWidget {
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.red.shade800,
+          seedColor: Colors.blue.shade800,
           brightness: Brightness.dark,
         ),
       ),
       routerConfig: router,
     );
   }
+}
+
+String _getGeminiAPIKey() {
+  if (kIsWeb) {
+    return FlutterConfig.get('GEMINI_API_KEY_WEB') as String;
+  }
+
+  if (defaultTargetPlatform == TargetPlatform.android) {
+    return FlutterConfig.get('GEMINI_API_KEY_ANDROID') as String;
+  }
+
+  return FlutterConfig.get('GEMINI_API_KEY_IOS') as String;
 }

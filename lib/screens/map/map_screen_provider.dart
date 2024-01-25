@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:tripper/domain/chat/get_points_of_interest_use_case.dart';
 import 'package:tripper/domain/map/get_location_use_case.dart';
 import 'package:tripper/screens/map/map_state.dart';
 
@@ -25,11 +26,16 @@ class MapNotifier extends _$MapNotifier {
       if (positionData.hasValue && positionData.value != null) {
         final position = positionData.value!;
         log('Location obtained $position');
+
         state = AsyncValue.data(
           MapState.idle(
             currentPosition: LatLng(position.latitude, position.longitude),
           ),
         );
+
+        ref.read(getPointsOfInterestUseCaseProvider(position.latitude, position.longitude)).whenData(
+              (value) => log('Points of interest obtained $value'),
+            );
       }
     });
 

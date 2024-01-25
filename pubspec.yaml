@@ -24,6 +24,8 @@ dependencies:
   rxdart: ^0.27.7
   google_maps_flutter: ^2.2.8
   geolocator: ^10.1.0
+  flutter_gemini: ^2.0.1
+  flutter_config: ^2.0.2
 
 dev_dependencies:
   flutter_test:
