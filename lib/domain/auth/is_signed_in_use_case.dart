@@ -6,10 +6,10 @@ part 'is_signed_in_use_case.g.dart';
 @riverpod
 Future<bool> isSignedInUseCase(IsSignedInUseCaseRef ref) async {
   await Future.delayed(const Duration(seconds: 1));
-  return await ref.read(authRepositoryProvider).isSignedInStream.first;
+  return (await ref.read(authRepositoryProvider.future)).isSignedInStream.first;
 }
 
 @Riverpod(keepAlive: true)
-Stream<bool> isSignedInStream(IsSignedInStreamRef ref) {
-  return ref.watch(authRepositoryProvider).isSignedInStream;
+Stream<bool> isSignedInStream(IsSignedInStreamRef ref) async* {
+  yield* (await ref.watch(authRepositoryProvider.future)).isSignedInStream;
 }

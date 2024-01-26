@@ -1,10 +1,9 @@
 import 'dart:async';
-import 'dart:developer';
 
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tripper/domain/chat/get_points_of_interest_use_case.dart';
-import 'package:tripper/domain/map/get_location_use_case.dart';
+import 'package:tripper/domain/chat/use_case/get_points_of_interest_use_case.dart';
+import 'package:tripper/domain/map/location.dart';
+import 'package:tripper/domain/map/use_case/get_location_use_case.dart';
 import 'package:tripper/screens/map/map_state.dart';
 
 part 'map_screen_provider.g.dart';
@@ -12,33 +11,37 @@ part 'map_screen_provider.g.dart';
 @riverpod
 class MapNotifier extends _$MapNotifier {
   @override
-  Future<MapState> build() async {
-    state = const AsyncValue.loading();
+  Future<MapState> build() async => const MapState.init();
 
-    ref.listen(getLocationUseCaseProvider, (_, next) {
-      final positionData = next;
+  Future<void> getCurrentLocation() async {
+    final position = await ref.watch(getLocationUseCaseProvider.future);
 
-      if (positionData.hasError) {
-        log('${positionData.error}');
-        return;
-      }
+    if (position == null) return;
 
-      if (positionData.hasValue && positionData.value != null) {
-        final position = positionData.value!;
-        log('Location obtained $position');
+    state = AsyncValue.data(
+      MapState.idle(
+        currentPosition: Location(
+          latitude: position.latitude,
+          longitude: position.longitude,
+        ),
+      ),
+    );
 
-        state = AsyncValue.data(
-          MapState.idle(
-            currentPosition: LatLng(position.latitude, position.longitude),
-          ),
-        );
+    await getPointsOfInterest(
+      Location(latitude: position.latitude, longitude: position.longitude),
+    );
+  }
 
-        ref.read(getPointsOfInterestUseCaseProvider(position.latitude, position.longitude)).whenData(
-              (value) => log('Points of interest obtained $value'),
-            );
-      }
-    });
+  Future<void> getPointsOfInterest(Location location) async {
+    final pointsOfInterest = await ref.watch(
+      getPointsOfInterestUseCaseProvider(location.latitude, location.longitude).future,
+    );
 
-    return const MapState.init();
+    state = AsyncValue.data(
+      MapState.idle(
+        currentPosition: location,
+        pointsOfInterest: pointsOfInterest,
+      ),
+    );
   }
 }

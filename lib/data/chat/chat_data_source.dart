@@ -1,3 +1,5 @@
+import 'package:tripper/data/map/dto/point_of_interest_list_dto.dart';
+
 abstract class ChatDataSource {
-  Future<String> fetchPointsOfInterest(double latitude, double longitude);
+  Future<PointOfInterestListDTO> fetchPointsOfInterest(double latitude, double longitude);
 }

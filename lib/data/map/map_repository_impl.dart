@@ -8,10 +8,10 @@ class MapRepositoryImpl implements MapRepository {
   final MapLocalDataSource localDataSource;
 
   @override
-  Location getPosition() => localDataSource.getPosition();
+  Location getPosition() => localDataSource.getLocation();
 
   @override
   Future<void> savePosition(double latitude, double longitude) async {
-    return localDataSource.savePosition(latitude, longitude);
+    return localDataSource.saveLocation(latitude, longitude);
   }
 }

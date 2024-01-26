@@ -3,8 +3,8 @@ import 'package:tripper/data/map/exceptions.dart';
 import 'package:tripper/data/map/map_local_data_source.dart';
 import 'package:tripper/domain/map/location.dart';
 
-const _positionLatitudeKey = 'position-latitude';
-const _positionLongitudeKey = 'position-longitude';
+const _locationLatitudeKey = 'location-latitude';
+const _locationLongitudeKey = 'location-longitude';
 
 class MapLocalDataSourceImpl implements MapLocalDataSource {
   const MapLocalDataSourceImpl(this.storage);
@@ -12,9 +12,9 @@ class MapLocalDataSourceImpl implements MapLocalDataSource {
   final SharedPreferences storage;
 
   @override
-  Location getPosition() {
-    final latitude = storage.getDouble(_positionLatitudeKey);
-    final longitude = storage.getDouble(_positionLongitudeKey);
+  Location getLocation() {
+    final latitude = storage.getDouble(_locationLatitudeKey);
+    final longitude = storage.getDouble(_locationLongitudeKey);
 
     if (latitude == null || longitude == null) {
       throw LocationNotAvailableException();
@@ -27,8 +27,8 @@ class MapLocalDataSourceImpl implements MapLocalDataSource {
   }
 
   @override
-  Future<void> savePosition(double latitude, double longitude) async {
-    await storage.setDouble(_positionLatitudeKey, latitude);
-    await storage.setDouble(_positionLongitudeKey, longitude);
+  Future<void> saveLocation(double latitude, double longitude) async {
+    await storage.setDouble(_locationLatitudeKey, latitude);
+    await storage.setDouble(_locationLongitudeKey, longitude);
   }
 }

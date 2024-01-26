@@ -6,5 +6,5 @@ part 'sign_out_use_case.g.dart';
 @riverpod
 Future<void> signOutUseCase(SignOutUseCaseRef ref) async {
   await Future.delayed(const Duration(seconds: 1));
-  await ref.read(authRepositoryProvider).deleteToken();
+  await (await ref.read(authRepositoryProvider.future)).deleteToken();
 }

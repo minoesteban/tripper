@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
@@ -8,17 +9,42 @@ import 'package:tripper/domain/map/location.dart';
 part 'get_location_use_case.g.dart';
 
 @riverpod
-Stream<Position?> getLocationUseCase(GetLocationUseCaseRef ref) {
+Future<Position?> getLocationUseCase(GetLocationUseCaseRef ref) => _getCurrentLocation();
+
+@riverpod
+Stream<Position?> getLocationStreamUseCase(GetLocationStreamUseCaseRef ref) async* {
   final streamController = StreamController<Position?>();
 
   try {
-    final lastKnownPosition = ref.read(mapRepositoryProvider).getPosition();
-    streamController.add(lastKnownPosition.asGeolocatorPosition);
+    final lastKnownLocation = (await ref.read(mapRepositoryProvider.future)).getPosition();
+    streamController.add(lastKnownLocation.asGeolocatorPosition);
   } catch (_) {}
 
-  _determinePosition(streamController);
+  unawaited(_determinePosition(streamController));
 
-  return streamController.stream;
+  yield* streamController.stream;
+}
+
+Future<Position?> _getCurrentLocation() async {
+  log('Getting current location in location provider');
+  // Test if location services are enabled.
+  final serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) return null;
+
+  LocationPermission permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.deniedForever) {
+    return null;
+  }
+
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+
+    if (permission == LocationPermission.denied) return null;
+  }
+
+  final location = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
+  return location;
 }
 
 Future<void> _determinePosition(StreamController<Position?> streamController) async {
@@ -51,17 +77,6 @@ Future<void> _determinePosition(StreamController<Position?> streamController) as
     streamController.addError('Location permissions are permanently denied, we cannot request permissions.');
     return;
   }
-
-  // When we reach here, permissions are granted and we can
-  // continue accessing the position of the device.
-  // const LocationSettings locationSettings = LocationSettings(
-  //   accuracy: LocationAccuracy.high,
-  //   distanceFilter: 100,
-  // );
-
-  // Geolocator.getPositionStream(locationSettings: locationSettings).listen((Position position) {
-  //   streamController.add(position);
-  // });
 
   final initialPosition = await Geolocator.getCurrentPosition(
     desiredAccuracy: LocationAccuracy.high,
