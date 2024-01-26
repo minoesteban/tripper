@@ -1,15 +1,15 @@
-import 'package:tripper/data/map/dto/point_of_interest_dto.dart';
+import 'package:tripper/data/map/dto/place_search_result_dto.dart';
 import 'package:tripper/data/map/mapper/location_dto_mapper.dart';
 import 'package:tripper/data/utils/bidirectional_mapper.dart';
 import 'package:tripper/domain/map/point_of_interest.dart';
 
-class PointOfInterestDTOMapper implements BidirectionalMapper<PointOfInterestDTO, PointOfInterest> {
-  const PointOfInterestDTOMapper();
+class PlaceSearchResultDTOMapper implements BidirectionalMapper<PlaceSearchResultDTO, PointOfInterest> {
+  const PlaceSearchResultDTOMapper();
 
   LocationDTOMapper get locationDTOMapper => const LocationDTOMapper();
 
   @override
-  PointOfInterest to(PointOfInterestDTO data) {
+  PointOfInterest to(PlaceSearchResultDTO data) {
     return PointOfInterest(
       placeId: data.placeId,
       name: data.name,
@@ -22,8 +22,8 @@ class PointOfInterestDTOMapper implements BidirectionalMapper<PointOfInterestDTO
   }
 
   @override
-  PointOfInterestDTO from(PointOfInterest data) {
-    return PointOfInterestDTO(
+  PlaceSearchResultDTO from(PointOfInterest data) {
+    return PlaceSearchResultDTO(
       placeId: data.placeId,
       name: data.name,
       description: data.description,

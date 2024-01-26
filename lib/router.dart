@@ -28,15 +28,17 @@ GoRouter router(RouterRef ref, [String? initialPath]) {
     refreshListenable: isSignedIn,
     initialLocation: initialPath ?? SplashScreen.routeName,
     redirect: (context, state) async {
+      final isSplash = state.uri.path == SplashScreen.routeName;
+      final isLoggingIn = state.uri.path == SignInScreen.routeName;
+
       if (isSignedIn.value.unwrapPrevious().hasError) return SignInScreen.routeName;
+      if (isSplash && isSignedIn.value.isLoading) return null;
       if (isSignedIn.value.isLoading || !isSignedIn.value.hasValue) return SignInScreen.routeName;
 
       final auth = isSignedIn.value.requireValue;
 
-      final isSplash = state.uri.path == SplashScreen.routeName;
       if (isSplash) return auth ? HomeScreen.routeName : SignInScreen.routeName;
 
-      final isLoggingIn = state.uri.path == SignInScreen.routeName;
       if (isLoggingIn) return auth ? HomeScreen.routeName : null;
 
       return auth ? null : SplashScreen.routeName;

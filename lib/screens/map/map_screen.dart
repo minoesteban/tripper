@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tripper/domain/map/location.dart';
+import 'package:tripper/domain/map/point_of_interest.dart';
 import 'package:tripper/screens/map/map_screen_provider.dart';
+import 'package:tripper/screens/utils/listenable_builders.dart';
 
 class MapScreen extends HookConsumerWidget {
   const MapScreen({super.key});
@@ -14,8 +14,8 @@ class MapScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final currentPositionNotifier = useValueNotifier<Location?>(null);
-    final markers = useValueNotifier(<Marker>{});
+    final currentLocationNotifier = useValueNotifier<Location?>(null);
+    final markersNotifier = useValueNotifier(<Marker>{});
 
     late GoogleMapController mapController;
 
@@ -25,37 +25,30 @@ class MapScreen extends HookConsumerWidget {
     }
 
     ref.listen(mapNotifierProvider, (_, state) {
-      state.when(
-        loading: () => log('MapScreen: loading'),
-        error: (error, stackTrace) => log('MapScreen: error: $error'),
-        data: (data) => data.when(
-          init: (_, __) => log('MapScreen: init'),
-          idle: (currentPosition, pointsOfInterest) {
-            log('MapScreen: idle: $currentPosition, ${pointsOfInterest.length}');
-
-            if (currentPosition != currentPositionNotifier.value) {
-              currentPositionNotifier.value = currentPosition;
+      state.whenOrNull(
+        data: (data) => data.whenOrNull(
+          idle: (currentLocation, landmarks, restaurants) {
+            // If current location changed, move camera to new location
+            if (currentLocation != currentLocationNotifier.value) {
+              currentLocationNotifier.value = currentLocation;
               mapController.animateCamera(
                 CameraUpdate.newLatLng(
-                  LatLng(currentPosition.latitude, currentPosition.longitude),
+                  LatLng(currentLocation.latitude, currentLocation.longitude),
                 ),
               );
             }
 
-            if (pointsOfInterest.isNotEmpty) {
-              markers.value.clear();
-              markers.value.addAll(
-                pointsOfInterest.map(
-                  (e) => Marker(
-                    markerId: MarkerId(e.placeId),
-                    position: LatLng(e.location.latitude, e.location.longitude),
-                    infoWindow: InfoWindow(
-                      title: e.name,
-                      snippet: e.description,
-                    ),
-                  ),
-                ),
-              );
+            final newMarkers = <Marker>{};
+            if (landmarks.isNotEmpty) {
+              newMarkers.addAll(landmarks.map(pointOfInterestasMarker));
+            }
+
+            if (restaurants.isNotEmpty) {
+              newMarkers.addAll(restaurants.map(pointOfInterestasMarker));
+            }
+
+            if (markersNotifier.value != newMarkers) {
+              markersNotifier.value = newMarkers;
             }
           },
         ),
@@ -63,10 +56,11 @@ class MapScreen extends HookConsumerWidget {
     });
 
     return Scaffold(
-      body: ValueListenableBuilder(
-        valueListenable: currentPositionNotifier,
-        builder: (_, position, ___) => GoogleMap(
-          markers: markers.value,
+      body: ValueListenableBuilder2<Location?, Set<Marker>>(
+        notifier1: currentLocationNotifier,
+        notifier2: markersNotifier,
+        builder: (context, position, markers, _) => GoogleMap(
+          markers: markers,
           myLocationEnabled: true,
           onMapCreated: onMapCreated,
           initialCameraPosition: CameraPosition(
@@ -76,5 +70,26 @@ class MapScreen extends HookConsumerWidget {
         ),
       ),
     );
+  }
+}
+
+Marker pointOfInterestasMarker(PointOfInterest point) => Marker(
+      markerId: MarkerId(point.placeId),
+      icon: point.type.asBitmapDescriptor,
+      position: LatLng(point.location.latitude, point.location.longitude),
+      infoWindow: InfoWindow(
+        title: point.name,
+        snippet: point.description,
+      ),
+    );
+
+extension on PointOfInterestType {
+  BitmapDescriptor get asBitmapDescriptor {
+    switch (this) {
+      case PointOfInterestType.landmark:
+        return BitmapDescriptor.defaultMarker;
+      case PointOfInterestType.restaurant:
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure);
+    }
   }
 }

@@ -29,6 +29,7 @@ dependencies:
   flutter_config: ^2.0.2
   package_info_plus: ^5.0.1
   flutter_google_places_sdk: ^0.2.2
+  flutter_google_maps_webservices: ^1.1.1
 
 dev_dependencies:
   flutter_test:
