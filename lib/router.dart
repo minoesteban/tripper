@@ -24,7 +24,7 @@ GoRouter router(RouterRef ref, [String? initialPath]) {
 
   final router = GoRouter(
     navigatorKey: navigatorKey,
-    debugLogDiagnostics: true,
+    debugLogDiagnostics: false,
     refreshListenable: isSignedIn,
     initialLocation: initialPath ?? SplashScreen.routeName,
     redirect: (context, state) async {

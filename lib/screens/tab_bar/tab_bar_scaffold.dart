@@ -5,6 +5,7 @@ import 'package:tripper/screens/home/home_screen.dart';
 import 'package:tripper/screens/map/map_screen.dart';
 import 'package:tripper/screens/profile/profile_screen.dart';
 import 'package:tripper/screens/trips/trips_screen.dart';
+import 'package:tripper/screens/utils/colors.dart';
 import 'package:tripper/screens/utils/styles.dart';
 
 class TabBarScaffold extends StatelessWidget {
@@ -20,10 +21,15 @@ class TabBarScaffold extends StatelessWidget {
     return Scaffold(
       body: child,
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.white,
         unselectedItemColor: Colors.white.withOpacity(0.5),
-        selectedLabelStyle: TripperStyles.tabBarStyle,
+        selectedLabelStyle: TripperStyles.tabBarLabelStyle,
+        unselectedLabelStyle: TripperStyles.tabBarLabelStyle.copyWith(
+          color: TripperColors.of(context).textSecondary,
+        ),
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: const Icon(Icons.map_rounded),

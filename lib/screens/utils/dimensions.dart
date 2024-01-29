@@ -1,4 +1,10 @@
 class Dimensions {
+  /// 0
+  static const zero = 0.0;
+
+  /// 1
+  static const one = 1.0;
+
   /// 2
   static const xxs = 2.0;
 
@@ -28,4 +34,7 @@ class Dimensions {
 
   /// 48
   static const xxxl = 48.0;
+
+  /// 56
+  static const inputFieldHeight = 56.0;
 }

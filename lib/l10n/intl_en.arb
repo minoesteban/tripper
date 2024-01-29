@@ -1,6 +1,71 @@
 {
+   "@@locale": "en",
     "appName": "Tripper",
     "@appName": {
+        "type" : "text"
+    },
+    "common_month_january": "January",
+    "@common_month_january": {
+        "type" : "text"
+    },
+    "common_month_february": "February",
+    "@common_month_february": {
+        "type" : "text"
+    },
+    "common_month_march": "March",
+    "@common_month_march": {
+        "type" : "text"
+    },
+    "common_month_april": "April",
+    "@common_month_april": {
+        "type" : "text"
+    },
+    "common_month_may": "May",
+    "@common_month_may": {
+        "type" : "text"
+    },
+    "common_month_june": "June",
+    "@common_month_june": {
+        "type" : "text"
+    },
+    "common_month_july": "July",
+    "@common_month_july": {
+        "type" : "text"
+    },
+    "common_month_august": "August",
+    "@common_month_august": {
+        "type" : "text"
+    },
+    "common_month_september": "September",
+    "@common_month_september": {
+        "type" : "text"
+    },
+    "common_month_october": "October",
+    "@common_month_october": {
+        "type" : "text"
+    },
+    "common_month_november": "November",
+    "@common_month_november": {
+        "type" : "text"
+    },
+    "common_month_december": "December",
+    "@common_month_december": {
+        "type" : "text"
+    },
+    "common_season_winter": "Winter",
+    "@common_season_winter": {
+        "type" : "text"
+    },
+    "common_season_spring": "Spring",
+    "@common_season_spring": {
+        "type" : "text"
+    },
+    "common_season_summer": "Summer",
+    "@common_season_summer": {
+        "type" : "text"
+    },
+    "common_season_autumn": "Autumn",
+    "@common_season_autumn": {
         "type" : "text"
     },
     "signIn_title": "Sign In",
@@ -50,5 +115,107 @@
     "profile_signOut_action": "Sign Out",
     "@profile_signOut_action": {
         "type" : "text"
+    },
+    "home_place_hint": "Where are you going?",
+    "@home_place_hint": {
+        "type" : "text"
+    },
+    "home_date_hint": "When are you going?",
+    "@home_date_hint": {
+        "type" : "text"
+    },
+    "home_people_hint": "How many people are going?",
+    "@home_people_hint": {
+        "type" : "text"
+    },
+    "home_date_from_hint": "From",
+    "@home_date_from_hint": {
+        "type" : "text"
+    },
+    "home_date_to_hint": "To",
+    "@home_date_to_hint": {
+        "type" : "text"
+    },
+    "home_date_or": "or",
+    "@home_date_or": {
+        "type" : "text"
+    },
+    "home_date_in": "in",
+    "@home_date_in": {
+        "type" : "text"
+    },
+    "home_date_days" : "Days",
+    "@home_date_days" : {
+        "type" : "text"
+    },
+    "home_date_weeks" : "Weeks",
+    "@home_date_weeks" : {
+        "type" : "text"
+    },
+    "home_date_months" : "Months",
+    "@home_date_months" : {
+        "type" : "text"
+    },
+    "home_date_month" : "Month",
+    "@home_date_month" : {
+        "type" : "text"
+    },
+    "home_date_season" : "Season",
+    "@home_date_season" : {
+        "type" : "text"
+    },
+    "home_date_confirm" : "Confirm",
+    "@home_date_confirm" : {
+        "type" : "text"
+    },
+    "home_search_button": "Search",
+    "@home_search_button": {
+        "type" : "text"
+    },
+    "home_date_select_period_items_error": "Please select at least one period to continue",
+    "@home_date_select_period_items_error": {
+        "type" : "text"
+    },
+    "home_people_adults_title": "Adults",
+    "@home_people_adults_title": {
+        "type" : "text"
+    },
+    "home_people_adults_subtitle": "Ages 13 and older",
+    "@home_people_adults_subtitle": {
+        "type" : "text"
+    },
+    "home_people_adults_count": "{count, plural, one{{count} Adult} other{{count} Adults}}",
+    "@home_people_adults_count": {
+        "placeholders": {
+            "count": {}
+        }
+    },
+    "home_people_children_title": "Children",
+    "@home_people_children_title": {
+        "type" : "text"
+    },
+    "home_people_children_subtitle": "Ages 2-12",
+    "@home_people_children_subtitle": {
+        "type" : "text"
+    },
+    "home_people_children_count": "{count, plural, one{{count} Child} other{{count} Children}}",
+    "@home_people_children_count": {
+        "placeholders": {
+            "count": {}
+        }
+    },
+    "home_people_infants_title": "Infants",
+    "@home_people_infants_title": {
+        "type" : "text"
+    },
+    "home_people_infants_subtitle": "Under 2",
+    "@home_people_infants_subtitle": {
+        "type" : "text"
+    },
+    "home_people_infants_count": "{count, plural, one{{count} Infant} other{{count} Infants}}",
+    "@home_people_infants_count": {
+        "placeholders": {
+            "count": {}
+        }
     }
 }

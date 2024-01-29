@@ -10,6 +10,7 @@ class PlaceSearchResultDTO {
     required this.rating,
     required this.location,
     required this.type,
+    this.address,
   });
 
   final String placeId;
@@ -19,4 +20,5 @@ class PlaceSearchResultDTO {
   final double? rating;
   final LocationDTO location;
   final PointOfInterestType type;
+  final String? address;
 }

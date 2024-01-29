@@ -9,6 +9,7 @@ class PointOfInterest {
     required this.type,
     this.rating,
     this.imageUrl,
+    this.address,
   });
 
   final String placeId;
@@ -18,6 +19,12 @@ class PointOfInterest {
   final String? imageUrl;
   final double? rating;
   final PointOfInterestType type;
+  final String? address;
+
+  @override
+  String toString() {
+    return 'PointOfInterest(placeId: $placeId, name: $name, location: $location, description: $description, imageUrl: $imageUrl, rating: $rating, type: $type, address: $address)';
+  }
 }
 
-enum PointOfInterestType { landmark, restaurant }
+enum PointOfInterestType { landmark, restaurant, destination }

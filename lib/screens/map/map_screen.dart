@@ -21,7 +21,7 @@ class MapScreen extends HookConsumerWidget {
 
     void onMapCreated(GoogleMapController controller) {
       mapController = controller;
-      ref.read(mapNotifierProvider.notifier).getCurrentLocation();
+      ref.read(mapNotifierProvider.notifier).listenToCurrentLocation();
     }
 
     ref.listen(mapNotifierProvider, (_, state) {
@@ -86,6 +86,8 @@ Marker pointOfInterestasMarker(PointOfInterest point) => Marker(
 extension on PointOfInterestType {
   BitmapDescriptor get asBitmapDescriptor {
     switch (this) {
+      case PointOfInterestType.destination:
+        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
       case PointOfInterestType.landmark:
         return BitmapDescriptor.defaultMarker;
       case PointOfInterestType.restaurant:

@@ -21,4 +21,9 @@ class ChatRepositoryImpl implements ChatRepository {
     final dto = await _dataSource.getRestaurants(latitude, longitude);
     return dto.points.map(pointOfInterestDTOMapper.to).toList();
   }
+
+  @override
+  Future<String> getTripRecommendations(PointOfInterest place, String duration, String people) async {
+    return _dataSource.getTripRecommendations(place, duration, people);
+  }
 }

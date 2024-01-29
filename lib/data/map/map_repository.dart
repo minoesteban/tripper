@@ -9,4 +9,6 @@ abstract class MapRepository {
   Future<List<PointOfInterest>> getNearbyLandmarks(double latitude, double longitude);
 
   Future<List<PointOfInterest>> getNearbyRestaurants(double latitude, double longitude);
+
+  Future<List<PointOfInterest>> searchDestinations(String text);
 }

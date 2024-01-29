@@ -146,7 +146,7 @@ packages:
     source: hosted
     version: "0.4.1"
   clock:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: clock
       sha256: cb6d7f03e1de671e34607e909a7213e31d7752be4fb66a86d29fe1eb14bfb5cf
@@ -225,6 +225,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.3.4"
+  debounce_throttle:
+    dependency: "direct main"
+    description:
+      name: debounce_throttle
+      sha256: c95cf47afda975fc507794a52040a16756fb2f31ad3027d4e691c41862ff5692
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   dio:
     dependency: transitive
     description:
@@ -829,6 +837,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  simple_observable:
+    dependency: transitive
+    description:
+      name: simple_observable
+      sha256: b392795c48f8b5f301b4c8f73e15f56e38fe70f42278c649d8325e859a783301
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.0"
   sky_engine:
     dependency: transitive
     description: flutter

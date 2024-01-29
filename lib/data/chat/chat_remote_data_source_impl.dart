@@ -6,6 +6,7 @@ import 'package:tripper/data/chat/chat_remote_data_source.dart';
 import 'package:tripper/data/chat/exceptions.dart';
 import 'package:tripper/data/map/dto/point_of_interest_list_dto.dart';
 import 'package:tripper/domain/chat/finish_reason.dart';
+import 'package:tripper/domain/map/point_of_interest.dart';
 
 const _responseJSONPrompt =
     '''\nMain property of the JSON is named "points", and each point has a "name", "description",
@@ -42,6 +43,18 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     return PointOfInterestListDTO.fromJson(json);
   }
 
+  @override
+  Future<String> getTripRecommendations(PointOfInterest place, String duration, String people) async {
+    const prompt = 'Given a place, duration and number of people, return a trip recommendation.';
+
+    final json = await _sendChatMessage(
+      prompt,
+      message: 'place: ${place.name}, ${place.address}, ${place.location}, duration: $duration, people: $people',
+    );
+
+    return json['trip_recommendation'] as String;
+  }
+
   Future<Map<String, dynamic>> _sendChatMessage(String prompt, {required String message}) async {
     final result = await _gemini.text('$prompt\n$message');
 
@@ -51,7 +64,11 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       );
     }
 
-    final rawResult = result!.output!.replaceAll('```json', '').replaceAll('```JSON', '').replaceAll('```', '');
+    final output = result!.output!;
+
+    log('output $output');
+
+    final rawResult = output.substring(output.indexOf('{'), output.lastIndexOf('}') + 1);
 
     log('rawResult $rawResult');
     final response = jsonDecode(rawResult) as Map<String, dynamic>;

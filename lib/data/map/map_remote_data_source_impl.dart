@@ -31,21 +31,37 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
     return _mapResultToDTO(PointOfInterestType.restaurant, result);
   }
 
+  @override
+  Future<List<PlaceSearchResultDTO>> searchDestinations(String text) async {
+    final result = await placesClient.searchByText(
+      text,
+      type: 'administrative_area_level_1,administrative_area_level_2,country,locality',
+    );
+
+    return _mapResultToDTO(PointOfInterestType.destination, result);
+  }
+
   Future<List<PlaceSearchResultDTO>> _mapResultToDTO(
       PointOfInterestType type, places.PlacesSearchResponse result) async {
     return result.results.map(
       (place) {
-        final photoReference = result.results.first.photos.first.photoReference;
-        final imageUrl = placesClient.buildPhotoUrl(
-          photoReference: photoReference,
-          maxWidth: 400,
-          maxHeight: 400,
-        );
+        final photos = place.photos;
+
+        String? imageUrl;
+        if (photos.isNotEmpty) {
+          final photoReference = place.photos.first.photoReference;
+          imageUrl = placesClient.buildPhotoUrl(
+            photoReference: photoReference,
+            maxWidth: 400,
+            maxHeight: 400,
+          );
+        }
 
         return PlaceSearchResultDTO(
           type: type,
           placeId: place.placeId,
           name: place.name,
+          address: place.formattedAddress,
           description: place.reference,
           imageUrl: imageUrl,
           rating: (place.rating ?? 0.0) * 1.0,

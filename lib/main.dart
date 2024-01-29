@@ -4,6 +4,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tripper/l10n/l10n_utils.dart';
 import 'package:tripper/router.dart';
+import 'package:tripper/screens/utils/theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -38,13 +39,7 @@ class TripperApp extends ConsumerWidget {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.blue.shade800,
-          brightness: Brightness.dark,
-        ),
-      ),
+      theme: TripperTheme.dark,
       routerConfig: router,
     );
   }

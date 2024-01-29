@@ -6,4 +6,7 @@ class Location {
 
   final double latitude;
   final double longitude;
+
+  @override
+  String toString() => 'Location(latitude: $latitude, longitude: $longitude)';
 }

@@ -20,68 +20,49 @@ Stream<Position?> getLocationStreamUseCase(GetLocationStreamUseCaseRef ref) asyn
     streamController.add(lastKnownLocation.asGeolocatorPosition);
   } catch (_) {}
 
-  unawaited(_determinePosition(streamController));
+  unawaited(_getCurrentLocationStream(streamController));
 
   yield* streamController.stream;
 }
 
 Future<Position?> _getCurrentLocation() async {
   log('Getting current location in location provider');
-  // Test if location services are enabled.
-  final serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) return null;
+  final hasGivenPermission = await _getLocationPermissions();
+  if (!hasGivenPermission) return null;
 
-  LocationPermission permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.deniedForever) {
-    return null;
-  }
-
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-
-    if (permission == LocationPermission.denied) return null;
-  }
-
-  final location = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-
-  return location;
+  return await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 }
 
-Future<void> _determinePosition(StreamController<Position?> streamController) async {
+Future<void> _getCurrentLocationStream(StreamController<Position?> streamController) async {
+  final hasGivenPermission = await _getLocationPermissions();
+  if (!hasGivenPermission) streamController.addError('Location service unavailable');
+
+  final lastKnownPosition = await Geolocator.getLastKnownPosition();
+  streamController.add(lastKnownPosition);
+
+  final currentPosition = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+  streamController.add(currentPosition);
+}
+
+Future<bool> _getLocationPermissions() async {
   // Test if location services are enabled.
   final serviceEnabled = await Geolocator.isLocationServiceEnabled();
   if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the
-    // App to enable the location services.
-    streamController.addError('Location services are disabled.');
-    return;
+    throw const LocationServiceDisabledException();
   }
 
   LocationPermission permission = await Geolocator.checkPermission();
   if (permission == LocationPermission.denied) {
     permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try
-      // requesting permissions again (this is also where
-      // Android's shouldShowRequestPermissionRationale
-      // returned true. According to Android guidelines
-      // your App should show an explanatory UI now.
-      streamController.addError('Location permissions are denied');
-      return;
-    }
+
+    if (permission == LocationPermission.denied) return false;
   }
 
-  if (permission == LocationPermission.deniedForever) {
-    // Permissions are denied forever, handle appropriately.
-    streamController.addError('Location permissions are permanently denied, we cannot request permissions.');
-    return;
-  }
+  if (permission == LocationPermission.deniedForever) return false;
 
-  final initialPosition = await Geolocator.getCurrentPosition(
-    desiredAccuracy: LocationAccuracy.high,
-  );
-  streamController.add(initialPosition);
+  if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) return true;
+
+  return false;
 }
 
 extension on Location {

@@ -4,4 +4,6 @@ abstract class ChatRepository {
   Future<List<PointOfInterest>> getLandmarks(double latitude, double longitude);
 
   Future<List<PointOfInterest>> getRestaurants(double latitude, double longitude);
+
+  Future<String> getTripRecommendations(PointOfInterest place, String duration, String people);
 }

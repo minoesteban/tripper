@@ -18,6 +18,7 @@ class PlaceSearchResultDTOMapper implements BidirectionalMapper<PlaceSearchResul
       rating: data.rating,
       location: locationDTOMapper.to(data.location),
       type: data.type,
+      address: data.address,
     );
   }
 
@@ -31,6 +32,7 @@ class PlaceSearchResultDTOMapper implements BidirectionalMapper<PlaceSearchResul
       rating: data.rating,
       location: locationDTOMapper.from(data.location),
       type: data.type,
+      address: data.address,
     );
   }
 }

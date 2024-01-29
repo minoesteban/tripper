@@ -32,4 +32,10 @@ class MapRepositoryImpl implements MapRepository {
     final dto = await remoteDataSource.getNearbyRestaurants(latitude, longitude);
     return dto.map(placeSearchResultDTOMapper.to).toList();
   }
+
+  @override
+  Future<List<PointOfInterest>> searchDestinations(String text) async {
+    final dto = await remoteDataSource.searchDestinations(text);
+    return dto.map(placeSearchResultDTOMapper.to).toList();
+  }
 }
