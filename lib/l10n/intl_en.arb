@@ -68,6 +68,10 @@
     "@common_season_autumn": {
         "type" : "text"
     },
+    "common_continue": "Continue",
+    "@common_continue": {
+        "type" : "text"
+    },
     "signIn_title": "Sign In",
     "@signIn_title": {
         "type" : "text"

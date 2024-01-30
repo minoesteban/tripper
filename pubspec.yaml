@@ -32,6 +32,7 @@ dependencies:
   flutter_google_maps_webservices: ^1.1.1
   clock: ^1.1.1
   debounce_throttle: ^2.0.0
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:

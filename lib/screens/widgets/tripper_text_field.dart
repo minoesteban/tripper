@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tripper/screens/utils/exports.dart';
-import 'package:tripper/screens/utils/styles.dart';
 
 class TripperTextField extends StatelessWidget {
   const TripperTextField({

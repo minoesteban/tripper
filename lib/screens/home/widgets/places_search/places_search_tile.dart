@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tripper/domain/map/point_of_interest.dart';
 import 'package:tripper/screens/home/widgets/places_search/places_search_provider.dart';
 import 'package:tripper/screens/utils/exports.dart';
-import 'package:tripper/screens/utils/styles.dart';
 
 class PlacesSearchTile extends HookConsumerWidget {
-  const PlacesSearchTile({Key? key}) : super(key: key);
+  const PlacesSearchTile({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final controller = useSearchController();
-    final selectedPlace = useValueNotifier<PointOfInterest?>(null);
 
-    useEffect(() {
-      void listener() {
-        if (selectedPlace.value != null) {
-          controller.text = selectedPlace.value!.name;
-        }
-      }
-
-      selectedPlace.addListener(listener);
-
-      return () => selectedPlace.removeListener(listener);
-    });
+    ref.listen(
+      placesSearchNotifierProvider,
+      (_, state) => state.whenData(
+        (data) => data.mapOrNull(
+          selected: (value) => controller.text = value.place.description,
+        ),
+      ),
+    );
 
     useEffect(() {
       Future<void> listener() async {
-        if (controller.text.isNotEmpty && controller.isOpen) {
+        if (controller.isOpen) {
           await ref.read(placesSearchNotifierProvider.notifier).search(controller.text);
         }
       }
@@ -62,6 +56,8 @@ class PlacesSearchTile extends HookConsumerWidget {
         searchController: controller,
         builder: (context, controller) => SearchBar(
           onTap: () => controller.openView(),
+          onChanged: (value) => ref.read(placesSearchNotifierProvider.notifier).search(value),
+          onSubmitted: (value) => ref.read(placesSearchNotifierProvider.notifier).search(value),
           elevation: MaterialStateProperty.all(5),
           hintStyle: MaterialStateProperty.all(
             TripperStyles.labelSmall.copyWith(
@@ -95,17 +91,17 @@ class PlacesSearchTile extends HookConsumerWidget {
                         idle: (data) => [
                           ...data.results.map(
                             (result) => ListTile(
-                              title: Text(result.name, style: TripperStyles.labelSmall),
-                              subtitle: result.address != null
-                                  ? Text(
-                                      result.address!,
-                                      style: TripperStyles.labelXSmall,
-                                    )
-                                  : null,
+                              title: Text(result.description, style: TripperStyles.labelSmall),
+                              // subtitle: result.address != null
+                              //     ? Text(
+                              //         result.address!,
+                              //         style: TripperStyles.labelXSmall,
+                              //       )
+                              //     : null,
                               onTap: () {
-                                controller.closeView(null);
-                                selectedPlace.value = result;
                                 FocusScope.of(context).unfocus();
+                                controller.closeView(null);
+                                ref.read(placesSearchNotifierProvider.notifier).selectPlace(result);
                               },
                             ),
                           ),

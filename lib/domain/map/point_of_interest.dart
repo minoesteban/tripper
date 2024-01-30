@@ -27,4 +27,4 @@ class PointOfInterest {
   }
 }
 
-enum PointOfInterestType { landmark, restaurant, destination }
+enum PointOfInterestType { landmark, restaurant }

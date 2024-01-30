@@ -1,8 +1,10 @@
 import 'package:tripper/data/map/map_local_data_source.dart';
 import 'package:tripper/data/map/map_remote_data_source.dart';
 import 'package:tripper/data/map/map_repository.dart';
+import 'package:tripper/data/map/mapper/place_autocomplete_result_dto_mapper.dart';
 import 'package:tripper/data/map/mapper/place_search_result_dto_mapper.dart';
 import 'package:tripper/domain/map/location.dart';
+import 'package:tripper/domain/map/place_autocomplete_result.dart';
 import 'package:tripper/domain/map/point_of_interest.dart';
 
 class MapRepositoryImpl implements MapRepository {
@@ -12,6 +14,7 @@ class MapRepositoryImpl implements MapRepository {
   final MapRemoteDataSource remoteDataSource;
 
   PlaceSearchResultDTOMapper get placeSearchResultDTOMapper => const PlaceSearchResultDTOMapper();
+  PlaceAutocompleteResultDTOMapper get placeAutocompleteResultDTOMapper => const PlaceAutocompleteResultDTOMapper();
 
   @override
   Location getPosition() => localDataSource.getLocation();
@@ -34,8 +37,8 @@ class MapRepositoryImpl implements MapRepository {
   }
 
   @override
-  Future<List<PointOfInterest>> searchDestinations(String text) async {
+  Future<List<PlaceAutocompleteResult>> searchDestinations(String text) async {
     final dto = await remoteDataSource.searchDestinations(text);
-    return dto.map(placeSearchResultDTOMapper.to).toList();
+    return dto.map<PlaceAutocompleteResult>(placeAutocompleteResultDTOMapper.to).toList();
   }
 }

@@ -3,26 +3,24 @@ import 'dart:async';
 import 'package:clock/clock.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:intl/intl.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tripper/domain/home/duration_type.dart';
 import 'package:tripper/domain/home/period_item.dart';
 import 'package:tripper/domain/home/period_type.dart';
 import 'package:tripper/screens/home/utils/period_item_utils.dart';
+import 'package:tripper/screens/home/widgets/dates_search/dates_search_provider.dart';
 import 'package:tripper/screens/utils/exports.dart';
 import 'package:tripper/screens/utils/listenable_builders.dart';
-import 'package:tripper/screens/utils/styles.dart';
 import 'package:tripper/screens/widgets/tripper_button.dart';
 import 'package:tripper/screens/widgets/tripper_expansion_tile.dart';
 import 'package:tripper/screens/widgets/tripper_selector.dart';
 
-enum DurationType { days, weeks, months }
-
-class DatesSearchTile extends HookWidget {
+class DatesSearchTile extends HookConsumerWidget {
   const DatesSearchTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final selectedFromDate = useValueNotifier<DateTime?>(null);
-    final selectedToDate = useValueNotifier<DateTime?>(null);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(datesSearchNotifierProvider);
 
     final selectedDurationType = useValueNotifier(DurationType.days);
     final selectedDuration = useValueNotifier(7);
@@ -30,57 +28,48 @@ class DatesSearchTile extends HookWidget {
     final selectedPeriodType = useValueNotifier(PeriodType.month);
     final selectedPeriodItems = useValueNotifier(<PeriodItem>{});
 
-    final areDatesSelected = useValueNotifier(false);
-    final isPeriodSelected = useValueNotifier(false);
-
     final controller = useExpansionTileController();
 
-    useEffect(() {
-      void listener() {
-        if (selectedFromDate.value != null && selectedToDate.value != null) {
-          areDatesSelected.value = true;
-          return;
-        }
-        areDatesSelected.value = false;
-      }
+    ref.listen(
+      datesSearchNotifierProvider,
+      (_, state) => state.whenData(
+        (data) => data.whenOrNull(
+          dates: (_, __) {
+            selectedPeriodItems.value = {};
+            controller.collapse();
+          },
+          period: (_, __, ___, ____) {
+            controller.collapse();
+          },
+          error: (message) => showSnackBar(context, message),
+        ),
+      ),
+    );
 
-      selectedFromDate.addListener(listener);
-      selectedToDate.addListener(listener);
+    final labelColor = Theme.of(context).inputDecorationTheme.hintStyle!.color!;
 
-      return () {
-        selectedFromDate.removeListener(listener);
-        selectedToDate.removeListener(listener);
-      };
-    });
+    final defaultLabel = Text(
+      context.l10n.home_date_hint,
+      style: TripperStyles.labelSmall.copyWith(
+        color: labelColor.withOpacity(.5),
+      ),
+    );
 
     return TripperExpansionTile(
       controller: controller,
-      title: ValueListenableBuilder3<bool, bool, Set<PeriodItem>>(
-        notifier1: areDatesSelected,
-        notifier2: isPeriodSelected,
-        notifier3: selectedPeriodItems,
-        builder: (context, datesSelected, periodSelected, periodItems, _) {
-          late String title;
-          if (datesSelected) {
-            title = '${selectedFromDate.value!.asDateLong} to ${selectedToDate.value!.asDateLong}';
-          } else if (periodSelected) {
-            title =
-                '${selectedDuration.value} ${selectedDurationType.value.name} in ${periodItems.map((item) => item.name).join(', ')}';
-          } else {
-            title = context.l10n.home_date_hint;
-          }
-
-          return Text(
-            title,
-            style: TripperStyles.labelSmall.copyWith(
-              color: Theme.of(context)
-                  .inputDecorationTheme
-                  .hintStyle!
-                  .color!
-                  .withOpacity(datesSelected || periodSelected ? 1 : .5),
-            ),
-          );
-        },
+      title: state.maybeWhen(
+        data: (data) => data.maybeMap(
+          dates: (dates) => Text(
+            dates.description,
+            style: TripperStyles.labelSmall.copyWith(color: labelColor),
+          ),
+          period: (period) => Text(
+            period.description,
+            style: TripperStyles.labelSmall.copyWith(color: labelColor),
+          ),
+          orElse: () => defaultLabel,
+        ),
+        orElse: () => defaultLabel,
       ),
       icon: Icons.calendar_today_rounded,
       children: [
@@ -88,11 +77,7 @@ class DatesSearchTile extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             const SizedBox(height: Dimensions.m),
-            DatesRangePickerField(
-              controller: controller,
-              selectedFromDate: selectedFromDate,
-              selectedToDate: selectedToDate,
-            ),
+            const DatesRangePickerField(),
             const OrDivider(),
             DurationTypeSelector(
               selectedDurationType: selectedDurationType,
@@ -115,19 +100,24 @@ class DatesSearchTile extends HookWidget {
             const SizedBox(height: Dimensions.l),
             PeriodItemGrid(
               selectedPeriodType: selectedPeriodType,
-              selectedFromDate: selectedFromDate,
-              selectedToDate: selectedToDate,
               selectedPeriodItems: selectedPeriodItems,
             ),
             const SizedBox(height: Dimensions.xl),
             Align(
               alignment: Alignment.centerRight,
-              child: ConfirmPeriodAndDurationButton(
-                controller: controller,
-                selectedFromDate: selectedFromDate,
-                selectedToDate: selectedToDate,
-                selectedPeriodItems: selectedPeriodItems,
-                isPeriodSelected: isPeriodSelected,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: Dimensions.m),
+                child: TripperButton(
+                  text: context.l10n.common_continue,
+                  onPressed: () {
+                    ref.read(datesSearchNotifierProvider.notifier).setPeriod(
+                          selectedDurationType.value,
+                          selectedDuration.value,
+                          selectedPeriodType.value,
+                          selectedPeriodItems.value,
+                        );
+                  },
+                ),
               ),
             ),
             const SizedBox(height: Dimensions.m),
@@ -138,54 +128,54 @@ class DatesSearchTile extends HookWidget {
   }
 }
 
-class DatesRangePickerField extends HookWidget {
-  const DatesRangePickerField({
-    required this.controller,
-    required this.selectedFromDate,
-    required this.selectedToDate,
-    super.key,
-  });
-
-  final ExpansionTileController controller;
-  final ValueNotifier<DateTime?> selectedFromDate;
-  final ValueNotifier<DateTime?> selectedToDate;
+class DatesRangePickerField extends HookConsumerWidget {
+  const DatesRangePickerField({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Future<void> pickToDate() async {
-      final fromDate = selectedFromDate.value;
-      final toDate = selectedToDate.value;
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(datesSearchNotifierProvider);
+    final selectedFromDate = useValueNotifier<DateTime?>(null);
+    final selectedToDate = useValueNotifier<DateTime?>(null);
 
-      final selectedDate = await showDatePicker(
+    useEffect(() {
+      state.whenOrNull(data: (data) {
+        data.mapOrNull(
+          dates: (dates) {
+            selectedFromDate.value = dates.fromDate;
+            selectedToDate.value = dates.toDate;
+          },
+        );
+      });
+    }, []);
+
+    ref.listen(
+      datesSearchNotifierProvider,
+      (_, state) => state.whenData(
+        (data) => data.mapOrNull(
+          dates: (dates) {
+            selectedFromDate.value = dates.fromDate;
+            selectedToDate.value = dates.toDate;
+          },
+          period: (value) {
+            selectedFromDate.value = null;
+            selectedToDate.value = null;
+          },
+        ),
+      ),
+    );
+
+    Future<void> pickDates() async {
+      final selectedDateRange = await showDateRangePicker(
         context: context,
-        initialDate: toDate ?? fromDate?.add(const Duration(days: 1)) ?? clock.now(),
-        firstDate: fromDate?.add(const Duration(days: 1)) ?? clock.now(),
+        firstDate: selectedFromDate.value?.add(const Duration(days: 1)) ?? clock.now(),
         lastDate: DateTime(2030),
       );
 
-      if (selectedDate != null) {
-        selectedToDate.value = selectedDate;
-        if (selectedFromDate.value != null) {
-          controller.collapse();
-        }
-      }
-    }
-
-    Future<void> pickFromDate() async {
-      final fromDate = selectedFromDate.value;
-
-      final selectedDate = await showDatePicker(
-        context: context,
-        initialDate: fromDate ?? clock.now(),
-        firstDate: clock.now(),
-        lastDate: DateTime(2030),
-      );
-
-      if (selectedDate != null) {
-        selectedFromDate.value = selectedDate;
-        if (selectedToDate.value == null) {
-          unawaited(pickToDate());
-        }
+      if (selectedDateRange != null) {
+        ref.read(datesSearchNotifierProvider.notifier).setDates(
+              selectedDateRange.start,
+              selectedDateRange.end,
+            );
       }
     }
 
@@ -215,7 +205,7 @@ class DatesRangePickerField extends HookWidget {
                     ),
                   ),
                   trailing: const Icon(Icons.calendar_today_rounded),
-                  onTap: pickFromDate,
+                  onTap: pickDates,
                 ),
               ),
               Expanded(
@@ -224,11 +214,11 @@ class DatesRangePickerField extends HookWidget {
                   title: Text(
                     toDate?.asDate ?? context.l10n.home_date_to_hint,
                     style: TripperStyles.labelSmall.copyWith(
-                      color: colorScheme.onBackground.withOpacity(fromDate == null ? .5 : 1),
+                      color: colorScheme.onBackground.withOpacity(toDate == null ? .5 : 1),
                     ),
                   ),
                   trailing: const Icon(Icons.calendar_today_rounded),
-                  onTap: pickToDate,
+                  onTap: pickDates,
                 ),
               ),
             ],
@@ -378,15 +368,11 @@ class PeriodTypeSelector extends StatelessWidget {
 class PeriodItemGrid extends StatelessWidget {
   const PeriodItemGrid({
     required this.selectedPeriodType,
-    required this.selectedFromDate,
-    required this.selectedToDate,
     required this.selectedPeriodItems,
     super.key,
   });
 
   final ValueNotifier<PeriodType> selectedPeriodType;
-  final ValueNotifier<DateTime?> selectedFromDate;
-  final ValueNotifier<DateTime?> selectedToDate;
   final ValueNotifier<Set<PeriodItem>> selectedPeriodItems;
 
   @override
@@ -456,62 +442,5 @@ class PeriodItemGrid extends StatelessWidget {
         );
       },
     );
-  }
-}
-
-class ConfirmPeriodAndDurationButton extends StatelessWidget {
-  const ConfirmPeriodAndDurationButton({
-    required this.controller,
-    required this.selectedFromDate,
-    required this.selectedToDate,
-    required this.selectedPeriodItems,
-    required this.isPeriodSelected,
-    super.key,
-  });
-
-  final ExpansionTileController controller;
-  final ValueNotifier<DateTime?> selectedFromDate;
-  final ValueNotifier<DateTime?> selectedToDate;
-  final ValueNotifier<Set<PeriodItem>> selectedPeriodItems;
-  final ValueNotifier<bool> isPeriodSelected;
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Dimensions.m),
-      child: ValueListenableBuilder(
-        valueListenable: selectedPeriodItems,
-        builder: (context, selectedItems, child) => TripperButton(
-          text: context.l10n.home_date_confirm,
-          enabled: selectedItems.isNotEmpty,
-          onPressed: () {
-            selectedFromDate.value = null;
-            selectedToDate.value = null;
-
-            isPeriodSelected.value = true;
-
-            controller.collapse();
-          },
-        ),
-      ),
-    );
-  }
-}
-
-extension on DateTime {
-  String get asDate => DateFormat.yMd().format(this);
-  String get asDateLong => DateFormat.yMMMd().format(this);
-}
-
-extension on DurationType {
-  String get name {
-    switch (this) {
-      case DurationType.days:
-        return L10n.current.home_date_days;
-      case DurationType.weeks:
-        return L10n.current.home_date_weeks;
-      case DurationType.months:
-        return L10n.current.home_date_months;
-    }
   }
 }

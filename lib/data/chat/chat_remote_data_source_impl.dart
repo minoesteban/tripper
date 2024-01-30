@@ -6,12 +6,17 @@ import 'package:tripper/data/chat/chat_remote_data_source.dart';
 import 'package:tripper/data/chat/exceptions.dart';
 import 'package:tripper/data/map/dto/point_of_interest_list_dto.dart';
 import 'package:tripper/domain/chat/finish_reason.dart';
-import 'package:tripper/domain/map/point_of_interest.dart';
+import 'package:tripper/domain/map/place_autocomplete_result.dart';
 
-const _responseJSONPrompt =
+const _responseJSONPoints =
     '''\nMain property of the JSON is named "points", and each point has a "name", "description",
     google maps "rating", google maps "place_id", "location" coordinates with "latitude" and "longitude", and an "image_url".
     If not points of interest are found, return an empty list. The response must be a valid, parseable JSON object.
+    ''';
+
+const _responseJSONTrip = '''\nMain property of the JSON is named "trip", and the trip has a "name", an "image_url",
+    and "legs", where each leg has "title", an "image_url", "from" and "to" dates, "places" and "activities".
+    The response must be a valid, parseable JSON object.
     ''';
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
@@ -24,7 +29,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     const prompt = 'Given location coordinates, return up to 5 relevant landmarks in a 10km radius.';
 
     final json = await _sendChatMessage(
-      prompt + _responseJSONPrompt,
+      prompt + _responseJSONPoints,
       message: 'latitude: $latitude, longitude: $longitude',
     );
 
@@ -36,7 +41,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
     const prompt = 'Given location coordinates, return up to 5 relevant eating places in a 2km radius.';
 
     final json = await _sendChatMessage(
-      prompt + _responseJSONPrompt,
+      prompt + _responseJSONPoints,
       message: 'latitude: $latitude, longitude: $longitude',
     );
 
@@ -44,12 +49,13 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   }
 
   @override
-  Future<String> getTripRecommendations(PointOfInterest place, String duration, String people) async {
-    const prompt = 'Given a place, duration and number of people, return a trip recommendation.';
+  Future<String> getTripRecommendations(PlaceAutocompleteResult place, String duration, String people) async {
+    const prompt =
+        'Given a place, a trip duration and numbers of people, return a recommendation for a trip that fits the parameters.';
 
     final json = await _sendChatMessage(
-      prompt,
-      message: 'place: ${place.name}, ${place.address}, ${place.location}, duration: $duration, people: $people',
+      prompt + _responseJSONTrip,
+      message: 'place: ${place.description}, duration: $duration, people: $people',
     );
 
     return json['trip_recommendation'] as String;

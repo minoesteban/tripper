@@ -1,15 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:tripper/screens/home/widgets/people_search/people_search_provider.dart';
 import 'package:tripper/screens/utils/exports.dart';
-import 'package:tripper/screens/utils/styles.dart';
 import 'package:tripper/screens/widgets/tripper_button.dart';
 import 'package:tripper/screens/widgets/tripper_expansion_tile.dart';
 
-class PeopleSearchTile extends HookWidget {
+class PeopleSearchTile extends HookConsumerWidget {
   const PeopleSearchTile({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(peopleSearchNotifierProvider);
+
     final controller = useExpansionTileController();
     final isPeopleSet = useValueNotifier(false);
 
@@ -17,33 +20,41 @@ class PeopleSearchTile extends HookWidget {
     final numberOfChildren = useValueNotifier(0);
     final numberOfInfants = useValueNotifier(0);
 
+    ref.listen(
+      peopleSearchNotifierProvider,
+      (_, state) => state.whenData(
+        (data) => data.whenOrNull(
+          set: (_, __, ___) {
+            controller.collapse();
+          },
+          error: (message) => showSnackBar(context, message),
+        ),
+      ),
+    );
+
+    final labelColor = Theme.of(context).inputDecorationTheme.hintStyle!.color!;
+
+    final defaultLabel = Text(
+      context.l10n.home_people_hint,
+      style: TripperStyles.labelSmall.copyWith(
+        color: labelColor.withOpacity(.5),
+      ),
+    );
+
     return TripperExpansionTile(
       controller: controller,
       onExpansionChanged: (isExpanded) => isPeopleSet.value = !isExpanded,
-      title: ValueListenableBuilder(
-        valueListenable: isPeopleSet,
-        builder: (context, isSet, _) {
-          late String title;
-
-          if (isSet) {
-            title = context.l10n.home_people_adults_count(numberOfAdults.value);
-            if (numberOfChildren.value > 0) {
-              title += ', ${context.l10n.home_people_children_count(numberOfChildren.value)}';
-            }
-            if (numberOfInfants.value > 0) {
-              title += ', ${context.l10n.home_people_infants_count(numberOfInfants.value)}';
-            }
-          } else {
-            title = context.l10n.home_people_hint;
-          }
-
-          return Text(
-            title,
-            style: TripperStyles.labelSmall.copyWith(
-              color: Theme.of(context).inputDecorationTheme.hintStyle!.color!.withOpacity(isSet ? 1 : .5),
-            ),
-          );
-        },
+      title: state.maybeWhen(
+        data: (data) => data.maybeMap(
+          set: (set) {
+            return Text(
+              set.description,
+              style: TripperStyles.labelSmall.copyWith(color: labelColor),
+            );
+          },
+          orElse: () => defaultLabel,
+        ),
+        orElse: () => defaultLabel,
       ),
       icon: Icons.people_alt_rounded,
       children: [
@@ -69,7 +80,13 @@ class PeopleSearchTile extends HookWidget {
             padding: const EdgeInsets.symmetric(horizontal: Dimensions.m),
             child: TripperButton(
               text: context.l10n.home_date_confirm,
-              onPressed: () => controller.collapse(),
+              onPressed: () {
+                ref.read(peopleSearchNotifierProvider.notifier).setPeople(
+                      numberOfAdults.value,
+                      numberOfChildren.value,
+                      numberOfInfants.value,
+                    );
+              },
             ),
           ),
         ),

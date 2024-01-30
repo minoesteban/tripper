@@ -25,8 +25,8 @@ class MapScreen extends HookConsumerWidget {
     }
 
     ref.listen(mapNotifierProvider, (_, state) {
-      state.whenOrNull(
-        data: (data) => data.whenOrNull(
+      state.whenData(
+        (data) => data.whenOrNull(
           idle: (currentLocation, landmarks, restaurants) {
             // If current location changed, move camera to new location
             if (currentLocation != currentLocationNotifier.value) {
@@ -86,8 +86,6 @@ Marker pointOfInterestasMarker(PointOfInterest point) => Marker(
 extension on PointOfInterestType {
   BitmapDescriptor get asBitmapDescriptor {
     switch (this) {
-      case PointOfInterestType.destination:
-        return BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueGreen);
       case PointOfInterestType.landmark:
         return BitmapDescriptor.defaultMarker;
       case PointOfInterestType.restaurant:

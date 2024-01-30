@@ -1,5 +1,6 @@
 import 'package:flutter_google_maps_webservices/places.dart' as places;
 import 'package:tripper/data/map/dto/location_dto.dart';
+import 'package:tripper/data/map/dto/place_autocomplete_result_dto.dart';
 import 'package:tripper/data/map/dto/place_search_result_dto.dart';
 import 'package:tripper/data/map/map_remote_data_source.dart';
 import 'package:tripper/domain/map/point_of_interest.dart';
@@ -17,7 +18,7 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       type: 'tourist_attraction',
     );
 
-    return _mapResultToDTO(PointOfInterestType.landmark, result);
+    return _mapSearchResultToDTO(PointOfInterestType.landmark, result);
   }
 
   @override
@@ -28,20 +29,20 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
       type: 'restaurant',
     );
 
-    return _mapResultToDTO(PointOfInterestType.restaurant, result);
+    return _mapSearchResultToDTO(PointOfInterestType.restaurant, result);
   }
 
   @override
-  Future<List<PlaceSearchResultDTO>> searchDestinations(String text) async {
-    final result = await placesClient.searchByText(
+  Future<List<PlaceAutocompleteResultDTO>> searchDestinations(String text) async {
+    final result = await placesClient.autocomplete(
       text,
-      type: 'administrative_area_level_1,administrative_area_level_2,country,locality',
+      types: ['(regions)'],
     );
 
-    return _mapResultToDTO(PointOfInterestType.destination, result);
+    return _mapAutocompleteResultToDTO(result);
   }
 
-  Future<List<PlaceSearchResultDTO>> _mapResultToDTO(
+  Future<List<PlaceSearchResultDTO>> _mapSearchResultToDTO(
       PointOfInterestType type, places.PlacesSearchResponse result) async {
     return result.results.map(
       (place) {
@@ -72,5 +73,17 @@ class MapRemoteDataSourceImpl implements MapRemoteDataSource {
         );
       },
     ).toList();
+  }
+
+  Future<List<PlaceAutocompleteResultDTO>> _mapAutocompleteResultToDTO(places.PlacesAutocompleteResponse result) async {
+    return result.predictions
+        .where((prediction) => prediction.description != null && prediction.placeId != null)
+        .map(
+          (prediction) => PlaceAutocompleteResultDTO(
+            placeId: prediction.placeId ?? '',
+            description: prediction.description!,
+          ),
+        )
+        .toList();
   }
 }

@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:tripper/domain/map/point_of_interest.dart';
+import 'package:tripper/domain/map/place_autocomplete_result.dart';
 
 part 'places_search_state.freezed.dart';
 
@@ -8,10 +8,10 @@ class PlacesSearchState with _$PlacesSearchState {
   const factory PlacesSearchState.init() = _PlacesSearchStateInit;
 
   const factory PlacesSearchState.idle(
-    List<PointOfInterest> results,
+    List<PlaceAutocompleteResult> results,
   ) = _PlacesSearchStateIdle;
 
   const factory PlacesSearchState.selected(
-    PointOfInterest place,
+    PlaceAutocompleteResult place,
   ) = _PlacesSearchStateSelected;
 }
