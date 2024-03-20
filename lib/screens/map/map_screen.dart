@@ -5,7 +5,7 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:tripper/domain/map/location.dart';
 import 'package:tripper/domain/map/point_of_interest.dart';
 import 'package:tripper/screens/map/map_screen_provider.dart';
-import 'package:tripper/screens/utils/listenable_builders.dart';
+import 'package:tripper/screens/widgets/listenable_builders.dart';
 
 class MapScreen extends HookConsumerWidget {
   const MapScreen({super.key});

@@ -1,11 +1,12 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tripper/data/chat/chat_providers.dart';
+import 'package:tripper/domain/chat/trip.dart';
 import 'package:tripper/domain/map/place_autocomplete_result.dart';
 
 part 'get_trip_recommendations_use_case.g.dart';
 
 @riverpod
-Future<String> getTripRecommendationsUseCase(
+Future<Trip> getTripRecommendationsUseCase(
   GetTripRecommendationsUseCaseRef ref,
   PlaceAutocompleteResult place,
   String duration,

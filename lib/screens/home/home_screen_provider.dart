@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tripper/domain/chat/use_case/get_trip_recommendations_use_case.dart';
 import 'package:tripper/screens/home/home_state.dart';
@@ -64,12 +66,20 @@ class HomeScreenNotifier extends _$HomeScreenNotifier {
       state = AsyncValue.data(
         HomeState.result(result),
       );
-    } catch (e) {
+    } catch (e, stack) {
+      log('Exception', error: e, stackTrace: stack);
+
       state = const AsyncValue.data(
         HomeState.error('Something went wrong'),
       );
 
       state = const AsyncValue.data(HomeState.init());
     }
+  }
+
+  void reset() {
+    state = const AsyncValue.data(
+      HomeState.init(),
+    );
   }
 }
