@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tripper/data/auth/auth_providers.dart';
+import 'package:tripper/domain/auth/auth_providers.dart';
 
 part 'sign_out_use_case.g.dart';
 

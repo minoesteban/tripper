@@ -6,8 +6,8 @@ import 'package:tripper/data/map/map_local_data_source.dart';
 import 'package:tripper/data/map/map_local_data_source_impl.dart';
 import 'package:tripper/data/map/map_remote_data_source.dart';
 import 'package:tripper/data/map/map_remote_data_source_impl.dart';
-import 'package:tripper/data/map/map_repository.dart';
-import 'package:tripper/data/map/map_repository_impl.dart';
+import 'package:tripper/domain/map/repository/map_repository.dart';
+import 'package:tripper/domain/map/repository/map_repository_impl.dart';
 import 'package:tripper/utils/platform.dart';
 
 part 'map_providers.g.dart';

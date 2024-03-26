@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:rxdart/rxdart.dart';
 import 'package:tripper/data/auth/auth_local_data_source.dart';
-import 'package:tripper/data/auth/auth_repository.dart';
+import 'package:tripper/domain/auth/repository/auth_repository.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._authLocalDataSource) {
@@ -32,7 +31,6 @@ class AuthRepositoryImpl implements AuthRepository {
 
   @override
   Future<void> saveToken(String token) async {
-    log('saveToken: $token');
     await _authLocalDataSource.saveToken(token);
     _isSignedInStream.add(isSignedIn);
   }

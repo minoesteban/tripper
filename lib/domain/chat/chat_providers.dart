@@ -4,8 +4,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tripper/core/storage/core_providers.dart';
 import 'package:tripper/data/chat/chat_remote_data_source.dart';
 import 'package:tripper/data/chat/chat_remote_data_source_impl.dart';
-import 'package:tripper/data/chat/chat_repository.dart';
-import 'package:tripper/data/chat/chat_repository_impl.dart';
+import 'package:tripper/domain/chat/repository/chat_repository.dart';
+import 'package:tripper/domain/chat/repository/chat_repository_impl.dart';
 import 'package:tripper/utils/platform.dart';
 
 part 'chat_providers.g.dart';

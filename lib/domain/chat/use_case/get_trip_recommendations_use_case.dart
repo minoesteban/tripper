@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tripper/data/chat/chat_providers.dart';
+import 'package:tripper/domain/chat/chat_providers.dart';
 import 'package:tripper/domain/chat/trip.dart';
 import 'package:tripper/domain/map/place_autocomplete_result.dart';
 

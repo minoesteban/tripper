@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tripper/domain/auth/is_signed_in_use_case.dart';
+import 'package:tripper/domain/auth/use_case/is_signed_in_use_case.dart';
 import 'package:tripper/screens/home/home_screen.dart';
 import 'package:tripper/screens/map/map_screen.dart';
 import 'package:tripper/screens/profile/profile_screen.dart';

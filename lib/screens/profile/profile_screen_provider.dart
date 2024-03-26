@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tripper/domain/auth/sign_out_use_case.dart';
+import 'package:tripper/domain/auth/use_case/sign_out_use_case.dart';
 import 'package:tripper/screens/profile/profile_state.dart';
 
 part 'profile_screen_provider.g.dart';

@@ -3,8 +3,8 @@ import 'dart:developer';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tripper/data/map/map_providers.dart';
 import 'package:tripper/domain/map/location.dart';
+import 'package:tripper/domain/map/map_providers.dart';
 
 part 'get_location_use_case.g.dart';
 

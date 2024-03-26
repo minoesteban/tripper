@@ -3,8 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tripper/core/storage/core_providers.dart';
 import 'package:tripper/data/auth/auth_local_data_source.dart';
 import 'package:tripper/data/auth/auth_local_data_source_impl.dart';
-import 'package:tripper/data/auth/auth_repository.dart';
-import 'package:tripper/data/auth/auth_repository_impl.dart';
+import 'package:tripper/domain/auth/repository/auth_repository.dart';
+import 'package:tripper/domain/auth/repository/auth_repository_impl.dart';
 
 part 'auth_providers.g.dart';
 

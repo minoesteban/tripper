@@ -1,5 +1,5 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tripper/data/map/map_providers.dart';
+import 'package:tripper/domain/map/map_providers.dart';
 import 'package:tripper/domain/map/place_autocomplete_result.dart';
 
 part 'search_destinations_use_case.g.dart';
