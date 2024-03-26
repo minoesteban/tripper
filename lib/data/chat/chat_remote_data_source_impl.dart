@@ -9,16 +9,15 @@ import 'package:tripper/data/map/dto/point_of_interest_list_dto.dart';
 import 'package:tripper/domain/chat/finish_reason.dart';
 import 'package:tripper/domain/map/place_autocomplete_result.dart';
 
-const _responseJSONPoints =
-    '''\nMain property of the JSON is named "points", and each point has a "name", "description",
-    google maps "rating", google maps "place_id", "location" coordinates with "latitude" and "longitude", and an "image_url".
-    If not points of interest are found, return an empty list. The response must be a valid, parseable JSON object.
+const _responseJSONPoints = '''\n
+    Expected response must be this JSON structure: {points: [{name: String,description: String,rating: double,
+    place_id: String,location: {latitude: double,longitude: double},image_url: String}]} where
+    rating is google maps rating, place_id is google maps place_id, and location is google maps location coordinates.
     ''';
 
-const _responseJSONTrip = '''\nMain property of the JSON is named "trip", and the trip has a "name", an "image_url",
-  @JsonKey(name: 'from_date')
-    and "legs", where each leg has "title", an "image_url", "from_date" and "to_date" dates in ISO 8601 valid format, "places" and "activities".
-    The response must be a valid, parseable JSON object.
+const _responseJSONTrip = '''\n
+    Expected response must be this JSON structure: {trip: {name: String,image_url: String,legs: [{title: String,
+    image_url: String,from_date: String,to_date: String,places: [String],activities: [String]}]}}
     ''';
 
 class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
