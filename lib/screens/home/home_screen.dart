@@ -7,7 +7,7 @@ import 'package:tripper/screens/home/widgets/people_search/people_search_tile.da
 import 'package:tripper/screens/home/widgets/places_search/places_search_tile.dart';
 import 'package:tripper/screens/utils/exports.dart';
 import 'package:tripper/screens/widgets/shimmer_overlay.dart';
-import 'package:tripper/screens/widgets/tripper_crossface_switcher.dart';
+import 'package:tripper/screens/widgets/tripper_crossfade_switcher.dart';
 
 class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
