@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:tripper/domain/chat/trip.dart';
 import 'package:tripper/screens/home/home_screen_provider.dart';
+import 'package:tripper/screens/home/trip_screen.dart';
 import 'package:tripper/screens/home/widgets/dates_search/dates_search_tile.dart';
 import 'package:tripper/screens/home/widgets/people_search/people_search_tile.dart';
 import 'package:tripper/screens/home/widgets/places_search/places_search_tile.dart';
@@ -23,6 +24,10 @@ class HomeScreen extends HookConsumerWidget {
       (_, state) {
         state.whenData(
           (data) => data.whenOrNull(
+            result: (trip) => context.push(
+              '${HomeScreen.routeName}/${TripScreen.routeName}',
+              extra: {'trip': trip},
+            ),
             error: (message) => showSnackBar(context, message),
           ),
         );
@@ -36,67 +41,11 @@ class HomeScreen extends HookConsumerWidget {
           child: state.when(
             data: (data) => data.when(
               init: () => const _SearchContent(),
-              result: (trip) => _ResultContent(trip: trip),
+              result: (trip) => const _SearchContent(),
               error: (_) => const _SearchContent(),
             ),
             loading: () => const _SearchContent(),
             error: (_, __) => const _SearchContent(),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _ResultContent extends ConsumerWidget {
-  const _ResultContent({
-    required this.trip,
-  });
-
-  final Trip trip;
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        flexibleSpace: FlexibleSpaceBar(
-          title: Text(trip.name),
-          background: Image.network(
-            trip.imageUrl,
-            fit: BoxFit.cover,
-          ),
-        ),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                trip.name,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: Dimensions.l),
-              Container(
-                padding: const EdgeInsets.only(left: Dimensions.sl),
-                decoration: BoxDecoration(
-                  border: Border(
-                    left: BorderSide(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-                child: SelectableText(trip.toString()),
-              ),
-              const SizedBox(height: Dimensions.l),
-              ElevatedButton(
-                onPressed: ref.read(homeScreenNotifierProvider.notifier).reset,
-                child: const Text('Reset'),
-              ),
-            ],
           ),
         ),
       ),

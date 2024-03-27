@@ -60,7 +60,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
       message: 'place: ${place.description}, duration: $duration, people: $people',
     );
 
-    // final json = jsonDecode(_testTripResponse) as Map<String, dynamic>;
+    // final json = jsonDecode(MockData.mockTripPromptResponse) as Map<String, dynamic>;
 
     return TripDTO.fromJson(json['trip'] as Map<String, dynamic>);
   }
@@ -76,11 +76,10 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
 
     final output = result!.output!;
 
-    log('output $output');
-
     final rawResult = output.substring(output.indexOf('{'), output.lastIndexOf('}') + 1);
 
-    log('rawResult $rawResult');
+    log(rawResult);
+
     final response = jsonDecode(rawResult) as Map<String, dynamic>;
 
     return response;

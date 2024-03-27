@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:tripper/domain/auth/use_case/is_signed_in_use_case.dart';
+import 'package:tripper/domain/chat/trip.dart';
 import 'package:tripper/screens/home/home_screen.dart';
+import 'package:tripper/screens/home/trip_screen.dart';
 import 'package:tripper/screens/map/map_screen.dart';
 import 'package:tripper/screens/profile/profile_screen.dart';
 import 'package:tripper/screens/sign_in/sign_in_screen.dart';
@@ -88,16 +90,31 @@ final mapTabRoute = GoRoute(
 final homeTabRoute = GoRoute(
   path: HomeScreen.routeName,
   builder: (ctx, state) => const HomeScreen(),
+  routes: [
+    tripScreen,
+  ],
 );
 
 @visibleForTesting
 final tripsTabRoute = GoRoute(
   path: TripsScreen.routeName,
   builder: (ctx, state) => const TripsScreen(),
+  routes: [
+    tripScreen,
+  ],
 );
 
 @visibleForTesting
 final profileTabRoute = GoRoute(
   path: ProfileScreen.routeName,
   builder: (ctx, state) => const ProfileScreen(),
+);
+
+@visibleForTesting
+final tripScreen = GoRoute(
+  path: TripScreen.routeName,
+  builder: (ctx, state) {
+    final args = state.extra as Map<String, dynamic>;
+    return TripScreen(trip: args['trip'] as Trip);
+  },
 );

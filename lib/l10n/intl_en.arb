@@ -72,6 +72,10 @@
     "@common_continue": {
         "type" : "text"
     },
+    "common_back": "Back",
+    "@common_back": {
+        "type" : "text"
+    },
     "signIn_title": "Sign In",
     "@signIn_title": {
         "type" : "text"

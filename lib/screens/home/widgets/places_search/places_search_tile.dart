@@ -42,11 +42,11 @@ class PlacesSearchTile extends HookConsumerWidget {
           maxHeight: 300,
         ),
         viewTrailing: [
-          // IconButton(
-          //   icon: const Icon(Icons.search_rounded),
-          //   color: Theme.of(context).primaryIconTheme.color?.withOpacity(.8),
-          //   onPressed: () {},
-          // ),
+          IconButton(
+            icon: const Icon(Icons.search_rounded),
+            color: Theme.of(context).primaryIconTheme.color?.withOpacity(.8),
+            onPressed: () {},
+          ),
         ],
         viewLeading: const SizedBox.shrink(),
         viewShape: RoundedRectangleBorder(
@@ -71,11 +71,11 @@ class PlacesSearchTile extends HookConsumerWidget {
           ),
           padding: MaterialStateProperty.all(const EdgeInsets.only(left: Dimensions.s)),
           trailing: [
-            // IconButton(
-            //   icon: const Icon(Icons.search_rounded),
-            //   color: Theme.of(context).primaryIconTheme.color?.withOpacity(.8),
-            //   onPressed: () {},
-            // ),
+            IconButton(
+              icon: const Icon(Icons.search_rounded),
+              color: Theme.of(context).primaryIconTheme.color?.withOpacity(.8),
+              onPressed: () {},
+            ),
           ],
           controller: controller,
           hintText: context.l10n.home_place_hint,
