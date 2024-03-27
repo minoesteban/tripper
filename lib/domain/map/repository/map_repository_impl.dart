@@ -17,11 +17,11 @@ class MapRepositoryImpl implements MapRepository {
   PlaceAutocompleteResultDTOMapper get placeAutocompleteResultDTOMapper => const PlaceAutocompleteResultDTOMapper();
 
   @override
-  Location getPosition() => localDataSource.getLocation();
+  Location getPosition() => localDataSource.getPosition();
 
   @override
   Future<void> savePosition(double latitude, double longitude) async {
-    return localDataSource.saveLocation(latitude, longitude);
+    return localDataSource.savePosition(latitude, longitude);
   }
 
   @override

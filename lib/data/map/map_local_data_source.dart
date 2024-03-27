@@ -1,7 +1,7 @@
 import 'package:tripper/domain/map/location.dart';
 
 abstract class MapLocalDataSource {
-  Location getLocation();
+  Location getPosition();
 
-  Future<void> saveLocation(double latitude, double longitude);
+  Future<void> savePosition(double latitude, double longitude);
 }

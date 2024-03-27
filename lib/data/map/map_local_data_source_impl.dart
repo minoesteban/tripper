@@ -12,7 +12,7 @@ class MapLocalDataSourceImpl implements MapLocalDataSource {
   final SharedPreferences storage;
 
   @override
-  Location getLocation() {
+  Location getPosition() {
     final latitude = storage.getDouble(_locationLatitudeKey);
     final longitude = storage.getDouble(_locationLongitudeKey);
 
@@ -27,7 +27,7 @@ class MapLocalDataSourceImpl implements MapLocalDataSource {
   }
 
   @override
-  Future<void> saveLocation(double latitude, double longitude) async {
+  Future<void> savePosition(double latitude, double longitude) async {
     await storage.setDouble(_locationLatitudeKey, latitude);
     await storage.setDouble(_locationLongitudeKey, longitude);
   }
