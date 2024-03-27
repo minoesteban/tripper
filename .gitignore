@@ -50,3 +50,9 @@ lib/l10n/generated
 
 # Keys
 .env
+
+
+# Visual tests
+test/visual/failures
+test/visual/goldens
+test/visual/ui_changes

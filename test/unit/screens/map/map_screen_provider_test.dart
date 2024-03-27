@@ -3,9 +3,9 @@ import 'package:tripper/domain/map/map_providers.dart';
 import 'package:tripper/screens/map/map_screen_provider.dart';
 import 'package:tripper/screens/map/map_state.dart';
 
-import '../../mocks/map_remote_data_source_mock.dart';
-import '../../utils/riverpod_utils.dart';
-import '../../utils/test_utils.dart';
+import '../../../mocks/map_remote_data_source_mock.dart';
+import '../../../utils/riverpod_utils.dart';
+import '../../../utils/test_utils.dart';
 
 void main() {
   testWidgets('initializes', (tester) async {

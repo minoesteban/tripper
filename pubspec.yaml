@@ -46,6 +46,7 @@ dev_dependencies:
   freezed: ^2.4.6
   json_serializable: ^6.7.1
   mocktail: ^1.0.3
+  golden_toolkit: ^0.15.0
 
 # The following section is specific to Flutter packages.
 flutter:

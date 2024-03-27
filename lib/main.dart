@@ -33,6 +33,7 @@ class TripperApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: L10n.current.appName,
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: const [
         L10n.delegate,
         GlobalMaterialLocalizations.delegate,

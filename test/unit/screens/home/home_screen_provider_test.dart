@@ -5,9 +5,9 @@ import 'package:tripper/domain/chat/chat_providers.dart';
 import 'package:tripper/screens/home/home_screen_provider.dart';
 import 'package:tripper/screens/home/home_state.dart';
 
-import '../../mocks/chat_remote_data_source_mock.dart';
-import '../../utils/riverpod_utils.dart';
-import '../../utils/test_utils.dart';
+import '../../../mocks/chat_remote_data_source_mock.dart';
+import '../../../utils/riverpod_utils.dart';
+import '../../../utils/test_utils.dart';
 
 void main() {
   final listener = Listener<AsyncValue<HomeState>>();
