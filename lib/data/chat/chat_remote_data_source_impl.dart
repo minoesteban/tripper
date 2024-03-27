@@ -7,7 +7,7 @@ import 'package:tripper/data/chat/dto/trip_dto.dart';
 import 'package:tripper/data/chat/exceptions.dart';
 import 'package:tripper/data/map/dto/point_of_interest_list_dto.dart';
 import 'package:tripper/domain/chat/finish_reason.dart';
-import 'package:tripper/domain/map/place_autocomplete_result.dart';
+import 'package:tripper/domain/map/search_destination_result.dart';
 
 const _responseJSONPoints = '''\n
     Expected response must be this JSON structure: {points: [{name: String,description: String,rating: double,
@@ -51,7 +51,7 @@ class ChatRemoteDataSourceImpl implements ChatRemoteDataSource {
   }
 
   @override
-  Future<TripDTO> getTripRecommendations(PlaceAutocompleteResult place, String duration, String people) async {
+  Future<TripDTO> getTripRecommendations(SearchDestinationResult place, String duration, String people) async {
     const prompt =
         'Given a place, a trip duration and numbers of people, return a recommendation for a trip that fits the parameters.';
 

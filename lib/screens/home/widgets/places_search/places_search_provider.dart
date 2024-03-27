@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:tripper/domain/map/place_autocomplete_result.dart';
+import 'package:tripper/domain/map/search_destination_result.dart';
 import 'package:tripper/domain/map/use_case/search_destinations_use_case.dart';
 import 'package:tripper/screens/home/widgets/places_search/places_search_state.dart';
 import 'package:tripper/utils/debouncer.dart';
@@ -36,7 +36,7 @@ class PlacesSearchNotifier extends _$PlacesSearchNotifier {
     });
   }
 
-  void selectPlace(PlaceAutocompleteResult place) {
+  void selectPlace(SearchDestinationResult place) {
     state = AsyncValue.data(
       PlacesSearchState.selected(place),
     );

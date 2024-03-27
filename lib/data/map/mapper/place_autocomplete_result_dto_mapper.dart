@@ -1,21 +1,21 @@
 import 'package:tripper/data/map/dto/place_autocomplete_result_dto.dart';
 import 'package:tripper/data/utils/bidirectional_mapper.dart';
-import 'package:tripper/domain/map/place_autocomplete_result.dart';
+import 'package:tripper/domain/map/search_destination_result.dart';
 
 class PlaceAutocompleteResultDTOMapper
-    implements BidirectionalMapper<PlaceAutocompleteResultDTO, PlaceAutocompleteResult> {
+    implements BidirectionalMapper<PlaceAutocompleteResultDTO, SearchDestinationResult> {
   const PlaceAutocompleteResultDTOMapper();
 
   @override
-  PlaceAutocompleteResult to(PlaceAutocompleteResultDTO data) {
-    return PlaceAutocompleteResult(
+  SearchDestinationResult to(PlaceAutocompleteResultDTO data) {
+    return SearchDestinationResult(
       placeId: data.placeId,
       description: data.description,
     );
   }
 
   @override
-  PlaceAutocompleteResultDTO from(PlaceAutocompleteResult data) {
+  PlaceAutocompleteResultDTO from(SearchDestinationResult data) {
     return PlaceAutocompleteResultDTO(
       placeId: data.placeId,
       description: data.description,

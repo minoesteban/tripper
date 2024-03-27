@@ -3,8 +3,8 @@ import 'package:tripper/data/chat/mapper/trip_dto_mapper.dart';
 import 'package:tripper/data/map/mapper/point_of_interest_dto_mapper.dart';
 import 'package:tripper/domain/chat/repository/chat_repository.dart';
 import 'package:tripper/domain/chat/trip.dart';
-import 'package:tripper/domain/map/place_autocomplete_result.dart';
 import 'package:tripper/domain/map/point_of_interest.dart';
+import 'package:tripper/domain/map/search_destination_result.dart';
 
 class ChatRepositoryImpl implements ChatRepository {
   ChatRepositoryImpl(this._dataSource);
@@ -27,7 +27,7 @@ class ChatRepositoryImpl implements ChatRepository {
   }
 
   @override
-  Future<Trip> getTripRecommendations(PlaceAutocompleteResult place, String duration, String people) async {
+  Future<Trip> getTripRecommendations(SearchDestinationResult place, String duration, String people) async {
     final dto = await _dataSource.getTripRecommendations(place, duration, people);
     return tripDTOMapper.to(dto);
   }

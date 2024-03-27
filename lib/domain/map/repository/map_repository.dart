@@ -1,6 +1,6 @@
 import 'package:tripper/domain/map/location.dart';
-import 'package:tripper/domain/map/place_autocomplete_result.dart';
 import 'package:tripper/domain/map/point_of_interest.dart';
+import 'package:tripper/domain/map/search_destination_result.dart';
 
 abstract class MapRepository {
   Future<void> savePosition(double latitude, double longitude);
@@ -11,5 +11,5 @@ abstract class MapRepository {
 
   Future<List<PointOfInterest>> getNearbyRestaurants(double latitude, double longitude);
 
-  Future<List<PlaceAutocompleteResult>> searchDestinations(String text);
+  Future<List<SearchDestinationResult>> searchDestinations(String text);
 }

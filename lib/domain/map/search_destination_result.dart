@@ -1,5 +1,5 @@
-class PlaceAutocompleteResult {
-  const PlaceAutocompleteResult({
+class SearchDestinationResult {
+  const SearchDestinationResult({
     required this.placeId,
     required this.description,
   });
